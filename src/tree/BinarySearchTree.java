@@ -124,6 +124,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return -1;
     }
 
+    // O(log n) - if balanced
     public T min() {
         if (isEmpty()) throw new IllegalStateException();
         var current = root;
@@ -137,6 +138,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return minIfNotSearchTree(root);
     }
 
+    // O(n)
     private T minIfNotSearchTree(Node root) {
         if (root == null)
             return null;
@@ -154,6 +156,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return equals(root, other.root);
     }
 
+    // O(n)
     private boolean equals(Node nodeOne, Node nodeTwo) {
         if (nodeOne == null && nodeTwo == null)
             return true;
@@ -163,6 +166,21 @@ public class BinarySearchTree<T extends Comparable<T>> {
             return false;
 
         return equals(nodeOne.left, nodeTwo.left) && equals(nodeOne.right, nodeTwo.right);
+    }
+
+    public boolean isBinarySearchTree() {
+        return isBinarySearchTree(root);
+    }
+
+    // TODO: incomplete
+    private boolean isBinarySearchTree(Node node) {
+        if (node == null || isLeaf(node))
+            return true;
+
+        return (node.right == null || lessThan(node, node.right)) &&
+                (node.left == null || greaterThan(node, node.left)) &&
+                isBinarySearchTree(node.left) &&
+                isBinarySearchTree(node.right);
     }
 
     private boolean isLeaf(Node node) {
@@ -195,5 +213,13 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     private boolean lessThan(T a, T b) {
         return a.compareTo(b) < 0;
+    }
+
+    private boolean greaterThan(Node a, Node b) {
+        return greaterThan(a.value, b.value);
+    }
+
+    private boolean greaterThan(T a, T b) {
+        return a.compareTo(b) > 0;
     }
 }
