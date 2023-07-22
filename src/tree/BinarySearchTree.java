@@ -2,6 +2,8 @@ package tree;
 
 import linkedlist.MyLinkedList;
 
+import java.util.Objects;
+
 public class BinarySearchTree<T extends Comparable<T>> {
     private class Node {
         T value;
@@ -148,14 +150,19 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     public boolean equals(BinarySearchTree<T> other) {
-        return equals(other.root);
+        if (other == null) return false;
+        return equals(root, other.root);
     }
 
-    private boolean equals(Node otherRoot) {
-        if (!root.value.equals(otherRoot.value))
+    private boolean equals(Node nodeOne, Node nodeTwo) {
+        if (nodeOne == null && nodeTwo == null)
+            return true;
+        if (nodeOne == null || nodeTwo == null)
             return false;
-        // TODO
-        return false;
+        if (!nodeOne.value.equals(nodeTwo.value))
+            return false;
+
+        return equals(nodeOne.left, nodeTwo.left) && equals(nodeOne.right, nodeTwo.right);
     }
 
     private boolean isLeaf(Node node) {
