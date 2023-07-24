@@ -13,6 +13,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
         Node(T value) {
             this.value = value;
         }
+
+        @Override
+        public String toString() {
+            return value.toString();
+        }
     }
 
     private Node root;
@@ -169,18 +174,16 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     public boolean isBinarySearchTree() {
-        return isBinarySearchTree(root);
+        return isBinarySearchTree(root, a -> -1, a -> 1);
     }
 
-    // TODO: incomplete
-    private boolean isBinarySearchTree(Node node) {
-        if (node == null || isLeaf(node))
+    private boolean isBinarySearchTree(Node node, Comparable<T> min, Comparable<T> max) {
+        if (node == null)
             return true;
 
-        return (node.right == null || lessThan(node, node.right)) &&
-                (node.left == null || greaterThan(node, node.left)) &&
-                isBinarySearchTree(node.left) &&
-                isBinarySearchTree(node.right);
+        return min.compareTo(node.value) < 0 && max.compareTo(node.value) > 0 &&
+                isBinarySearchTree(node.left, min, node.value) &&
+                isBinarySearchTree(node.right, node.value, max);
     }
 
     private boolean isLeaf(Node node) {
