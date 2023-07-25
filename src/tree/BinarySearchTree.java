@@ -62,6 +62,20 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return false;
     }
 
+    public boolean find(T value) {
+        return find(root, value);
+    }
+
+    // O(n) - it works on non-search trees too
+    private boolean find(Node root, T value) {
+        if (root == null)
+            return false;
+        if (root.value.equals(value))
+            return true;
+        return find(root.left, value) || find(root.right, value);
+        // if it's search tree O(log n) -> return lessThan(root.value, value) ? find(root.right, value) : find(root.left, value);
+    }
+
     public MyLinkedList<T> inOrderTraversal() {
         var list = new MyLinkedList<T>();
         inOrderTraversal(root, list);
