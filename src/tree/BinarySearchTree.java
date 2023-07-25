@@ -217,8 +217,14 @@ public class BinarySearchTree<T extends Comparable<T>> {
                 isBinarySearchTree(node.right, node.value, max);
     }
 
-    private boolean isLeaf(Node node) {
-        return node.left == null && node.right == null;
+    public int size() {
+        return size(root);
+    }
+
+    private int size(Node root) {
+        if (root == null)
+            return 0;
+        return 1 + size(root.left) + size(root.right);
     }
 
     public boolean isBalanced() {
@@ -239,6 +245,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
             return a;
 
         return lessThan(a, b) ? a : b;
+    }
+
+    private boolean isLeaf(Node node) {
+        return node.left == null && node.right == null;
     }
 
     private boolean lessThan(Node a, Node b) {
