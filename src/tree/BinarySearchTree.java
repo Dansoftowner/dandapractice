@@ -187,6 +187,19 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return min(root.value, min(minLeft, minRight));
     }
 
+    public T max() {
+        return max(root);
+    }
+
+    // O(log n)
+    private T max(Node root) {
+        if (root == null)
+            throw new IllegalStateException();
+        if (root.right == null)
+            return root.value;
+        return max(root.right);
+    }
+
     public boolean equals(BinarySearchTree<T> other) {
         if (other == null) return false;
         return equals(root, other.root);
