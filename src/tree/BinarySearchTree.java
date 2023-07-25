@@ -258,6 +258,22 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return areSiblings || areSiblings(root.left, value1, value2) || areSiblings(root.right, value1, value2);
     }
 
+    public MyArrayList<T> getAncestors(T value) {
+        var list = new MyArrayList<T>(height(root));
+        getAncestors(root, value, list);
+        return list;
+    }
+
+    private boolean getAncestors(Node root, T value, MyArrayList<T> list) {
+        if (root == null)
+            return false;
+        if (Objects.equals(root.value, value))
+            return true;
+        boolean found = getAncestors(root.left, value, list) || getAncestors(root.right, value, list);
+        if (found) list.add(root.value);
+        return found;
+    }
+
     public int size() {
         return size(root);
     }
