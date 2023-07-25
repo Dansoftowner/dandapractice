@@ -227,6 +227,18 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return 1 + size(root.left) + size(root.right);
     }
 
+    public int countLeaves() {
+        return countLeaves(root);
+    }
+
+    private int countLeaves(Node root) {
+        if (root == null)
+            return 0;
+        if (isLeaf(root))
+            return 1;
+        return countLeaves(root.left) + countLeaves(root.right);
+    }
+
     public boolean isBalanced() {
         return Math.abs(height(root.left) - height(root.right)) < 2;
     }
