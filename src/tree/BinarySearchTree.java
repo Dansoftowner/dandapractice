@@ -1,5 +1,6 @@
 package tree;
 
+import array.MyArrayList;
 import linkedlist.MyLinkedList;
 
 import java.util.Objects;
@@ -104,6 +105,36 @@ public class BinarySearchTree<T extends Comparable<T>> {
         postOrderTraversal(root.left, list);
         postOrderTraversal(root.right, list);
         list.addLast(root.value);
+    }
+
+    // Breadth-first traversal - O(n)
+    public MyArrayList<T> levelOrderTraversal() {
+        int height = height(root);
+        int maxElements = (int) Math.pow(2, height + 1) - 1;
+
+        var list = new MyArrayList<T>(maxElements);
+        for (int i = 0; i <= height; i++)
+            nodesAtKDistance(root, i, list);
+        return list;
+    }
+
+    public MyArrayList<T> nodesAtKDistance(int k) {
+        var list = new MyArrayList<T>((int) Math.pow(2, k));
+        nodesAtKDistance(root, k, list);
+        return list;
+    }
+
+    private void nodesAtKDistance(Node node, int k, MyArrayList<T> list) {
+        if (k < 0)
+            throw new IllegalArgumentException();
+        if (node == null)
+            return;
+        if (k == 0) {
+            list.add(node.value);
+            return;
+        }
+        nodesAtKDistance(node.left, k - 1, list);
+        nodesAtKDistance(node.right, k - 1, list);
     }
 
     private int height(Node node) {
