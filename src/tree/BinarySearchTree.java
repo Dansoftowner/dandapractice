@@ -31,7 +31,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
 
         Node current = root;
-        while(true) {
+        while (true) {
             if (lessThan(current, newNode)) {
                 if (current.right == null) {
                     current.right = newNode;
@@ -161,7 +161,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
     public int depth(T value) {
         Node current = root;
         int depth = 0;
-        while(current != null) {
+        while (current != null) {
             if (current.value.equals(value)) {
                 return depth;
             }
@@ -242,6 +242,20 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return min.compareTo(node.value) < 0 && max.compareTo(node.value) > 0 &&
                 isBinarySearchTree(node.left, min, node.value) &&
                 isBinarySearchTree(node.right, node.value, max);
+    }
+
+    public boolean areSiblings(T value1, T value2) {
+        return areSiblings(root, value1, value2);
+    }
+
+    private boolean areSiblings(Node root, T value1, T value2) {
+        if (root == null)
+            return false;
+        boolean areSiblings = false;
+        if (root.left != null && root.right != null )
+            areSiblings = Objects.equals(value1, root.left.value) && Objects.equals(value2, root.right.value) ||
+                Objects.equals(value1, root.right.value) && Objects.equals(value2, root.left.value);
+        return areSiblings || areSiblings(root.left, value1, value2) || areSiblings(root.right, value1, value2);
     }
 
     public int size() {
