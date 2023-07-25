@@ -274,6 +274,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return (root == null);
     }
 
+    public boolean isPerfect() {
+        int size = size();
+        return Math.pow(2, height(root) + 1) - 1 == size;
+    }
+
     private T min(T a, T b) {
         if (a == null && b == null)
             throw new IllegalArgumentException();
