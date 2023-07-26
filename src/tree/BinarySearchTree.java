@@ -252,9 +252,9 @@ public class BinarySearchTree<T extends Comparable<T>> {
         if (root == null)
             return false;
         boolean areSiblings = false;
-        if (root.left != null && root.right != null )
+        if (root.left != null && root.right != null)
             areSiblings = Objects.equals(value1, root.left.value) && Objects.equals(value2, root.right.value) ||
-                Objects.equals(value1, root.right.value) && Objects.equals(value2, root.left.value);
+                    Objects.equals(value1, root.right.value) && Objects.equals(value2, root.left.value);
         return areSiblings || areSiblings(root.left, value1, value2) || areSiblings(root.right, value1, value2);
     }
 
@@ -297,7 +297,14 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     public boolean isBalanced() {
-        return Math.abs(height(root.left) - height(root.right)) < 2;
+        return isBalanced(root);
+    }
+
+    private boolean isBalanced(Node root) {
+        if (root == null)
+            return true;
+        int balanceFactor = height(root.left) - height(root.right);
+        return Math.abs(balanceFactor) < 2 && isBalanced(root.left) && isBalanced(root.right);
     }
 
     public boolean isEmpty() {
