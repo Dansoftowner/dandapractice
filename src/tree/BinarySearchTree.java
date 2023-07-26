@@ -49,6 +49,21 @@ public class BinarySearchTree<T extends Comparable<T>> {
         }
     }
 
+    // inserting recursively
+    public void add(T item) {
+        root = add(root, new Node(item));
+    }
+
+    private Node add(Node root, Node item) {
+        if (root == null)
+            return item;
+        if (lessThan(root, item))
+            root.right = add(root.right, item);
+        else
+            root.left = add(root.left, item);
+        return root;
+    }
+
     public boolean contains(T value) {
         Node current = root;
         while (current != null) {
