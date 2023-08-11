@@ -50,48 +50,43 @@ public class AVLTree<T extends Comparable<T>> {
     private AVLNode<T> balance(AVLNode<T> root) {
         if (isLeftHeavy(root)) {
             if (balanceFactor(root.leftChild) < 0)
-                leftRotate(root.leftChild);
+                root.leftChild = leftRotate(root.leftChild);
             return rightRotate(root);
         }
         else if (isRightHeavy(root)) {
             if (balanceFactor(root.rightChild) > 0)
-                rightRotate(root.rightChild);
+                root.rightChild = rightRotate(root.rightChild);
             return leftRotate(root);
         }
         return root;
     }
 
-    private AVLNode<T> leftRotate(AVLNode<T> node) {
-        AVLNode<T> rightChild = node.rightChild;
+    private AVLNode<T> leftRotate(AVLNode<T> root) {
+        AVLNode<T> newRoot = root.rightChild;
+        root.rightChild = newRoot.leftChild;
+        newRoot.leftChild = root;
 
-        var temp = rightChild.leftChild;
-        rightChild.leftChild = node;
-        node.rightChild = temp;
+        recalculateHeight(root);
+        recalculateHeight(newRoot);
 
-        recalculateHeight(node);
-        recalculateHeight(rightChild);
-
-        return rightChild;
+        return newRoot;
     }
 
-    private AVLNode<T> rightRotate(AVLNode<T> node) {
-        AVLNode<T> leftChild = node.leftChild;
+    private AVLNode<T> rightRotate(AVLNode<T> root) {
+        AVLNode<T> newRoot = root.leftChild;
+        root.leftChild = newRoot.rightChild;
+        newRoot.rightChild = root;
 
-        var temp = leftChild.rightChild;
-        node.leftChild.rightChild = node;
-        node.leftChild = temp;
+        recalculateHeight(root);
+        recalculateHeight(newRoot);
 
-        recalculateHeight(node);
-        recalculateHeight(leftChild);
-
-        return leftChild;
+        return newRoot;
     }
 
     public MyArrayList<T> levelOrder() {
         var list = new MyArrayList<T>((int) Math.pow(2, root.height + 1) - 1);
-        for (int i = 0; i <= height(root); i++) {
+        for (int i = 0; i <= height(root); i++)
             getElementsAtDistance(root, i, list);
-        }
         return list;
     }
 

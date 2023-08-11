@@ -42,13 +42,9 @@ public class Main {
         System.out.println(list);
 
         var avl = new AVLTree<Integer>();
-        avl.insert(20);
-        avl.insert(10);
-        avl.insert(30);
-        avl.insert(40);
-        avl.insert(50);
+        for (int i : new int[] { 30, 15, 18, 10, 16, 7, 8})
+            avl.insert(i);
         System.out.println(avl);
-        System.out.println(new FibonacciSequence(1, 1).list(10));
 
     }
 }
