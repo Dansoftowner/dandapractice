@@ -2,9 +2,11 @@ import hashtable.MyHashTableLP;
 import hashtable.MyHashtable;
 import linkedlist.MyLinkedList;
 import queue.*;
+import random.FibonacciSequence;
 import stack.Browser;
 import stack.MinStack;
 import stack.TwoStacks;
+import tree.AVLTree;
 import tree.BinarySearchTree;
 
 import java.util.stream.Stream;
@@ -38,6 +40,15 @@ public class Main {
         for (var i : new int[] { 7, 9, 4, 6, 1, 10, 8}) binarySearchTree.insert(i);
         System.out.println(binarySearchTree.inOrderTraversal());
         System.out.println(list);
+
+        var avl = new AVLTree<Integer>();
+        avl.insert(20);
+        avl.insert(10);
+        avl.insert(30);
+        avl.insert(40);
+        avl.insert(50);
+        System.out.println(avl);
+        System.out.println(new FibonacciSequence(1, 1).list(10));
 
     }
 }
