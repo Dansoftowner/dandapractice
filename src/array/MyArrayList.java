@@ -64,6 +64,10 @@ public class MyArrayList<T> {
         return pointer == 0;
     }
 
+    public int size() {
+        return pointer;
+    }
+
     @Override
     public String toString() {
         var sb = new StringBuilder();
