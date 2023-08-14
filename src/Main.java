@@ -7,6 +7,7 @@ import stack.Browser;
 import stack.MinStack;
 import stack.TwoStacks;
 import tree.AVLTree;
+import tree.AgainAVLTree;
 import tree.BinarySearchTree;
 
 import java.util.stream.Stream;
@@ -42,9 +43,13 @@ public class Main {
         System.out.println(list);
 
         var avl = new AVLTree<Integer>();
-        for (int i : new int[] { 30, 15, 18, 10, 16, 7, 8})
+        var avl2 = new AgainAVLTree<Integer>();
+        for (int i : new int[] { 30, 15, 18, 10, 16, 7, 8}) {
             avl.insert(i);
+            avl2.insert(i);
+        }
         System.out.println(avl);
+        System.out.println(avl2);
 
     }
 }
