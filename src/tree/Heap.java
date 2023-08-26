@@ -1,13 +1,9 @@
 package tree;
 
-import java.util.Arrays;
-
-import static tree.Comparables.greaterThan;
-
 public class Heap<T extends Comparable<T>> {
 
     private T[] tree;
-    private int pointer;
+    private int size;
 
     @SuppressWarnings("unchecked")
     public Heap(int capacity) {
@@ -17,86 +13,85 @@ public class Heap<T extends Comparable<T>> {
     public void insert(T value) {
         if (isFull())
             throw new IllegalStateException();
-        tree[pointer] = value;
-        bubbleUpIteratively(pointer);
-        pointer++;
+        tree[size++] = value;
+        bubbleUp();
     }
 
     public T remove() {
         if (isEmpty())
             throw new IllegalStateException();
         var removed = tree[0];
-        tree[0] = tree[pointer - 1];
-        tree[--pointer] = null;
-        bubbleDownIteratively(0);
+        tree[0] = tree[size - 1];
+        tree[--size] = null;
+        bubbleDown();
         return removed;
     }
 
-    private void bubbleUp(int index) {
-        if (index == 0)
-            return;
-        if (tree[index].compareTo(getParent(index)) < 0)
-            return;
-        int parentIndex = getParentIndex(index);
-        swap(index, parentIndex);
-        bubbleUp(parentIndex);
-    }
-
-    private void bubbleDown(int index) {
-        if (index == pointer - 1)
-            return;
-        if (tree[index].compareTo(getGreaterChild(index)) > 0)
-            return;
-        int childIndex = getGreaterChildIndex(index);
-        swap(index, childIndex);
-        bubbleDown(childIndex);
-    }
-
-    private void bubbleUpIteratively(int index) {
-        int i = index;
-        while (tree[i].compareTo(getParent(i)) > 0) {
-            int parentIndex = getParentIndex(i);
+    private void bubbleUp() {
+        int i = size - 1;
+        while (tree[i].compareTo(parent(i)) > 0) {
+            int parentIndex = parentIndex(i);
             swap(i, parentIndex);
             i = parentIndex;
         }
     }
 
-    private void bubbleDownIteratively(int index) {
-        int i = index;
-        while(tree[i].compareTo(getGreaterChild(i)) < 0) {
-            int greaterChildIndex = getGreaterChildIndex(i);
+    private void bubbleDown() {
+        int i = 0;
+        while(!isValidParent(i)) {
+            int greaterChildIndex = greaterChildIndex(i);
             swap(i, greaterChildIndex);
             i = greaterChildIndex;
         }
     }
 
-    private T getGreaterChild(int index) {
-        return tree[getGreaterChildIndex(index)];
+    private boolean isValidParent(int index) {
+        if (greaterChildIndex(index) >= 0)
+            return greaterChild(index).compareTo(tree[index]) < 0;
+        return true;
     }
 
-    private int getGreaterChildIndex(int index) {
-        int left = getLeftChildIndex(index);
-        int right = getRightChildIndex(index);
-        if (isOutOfScope(left))
-            return index;
-        if (isOutOfScope(right))
-            return left;
-        return tree[left].compareTo(tree[right]) > 0 ? left : right;
+    private T greaterChild(int index) {
+        return tree[greaterChildIndex(index)];
     }
 
-    private int getLeftChildIndex(int index) {
+    private int greaterChildIndex(int i) {
+        if (!hasLeftChild(i))
+            return -1;
+        if (!hasRightChild(i))
+            return leftChildIndex(i);
+        return leftChild(i).compareTo(rightChild(i)) > 0 ? leftChildIndex(i) : rightChildIndex(i);
+    }
+
+    private boolean hasLeftChild(int index) {
+        return index * 2 + 1 < size;
+    }
+
+    private boolean hasRightChild(int index) {
+        return index * 2 + 2 < size;
+    }
+
+    private T rightChild(int index) {
+        return tree[rightChildIndex(index)];
+    }
+
+    private T leftChild(int index) {
+        return tree[leftChildIndex(index)];
+    }
+
+    private T parent(int index) {
+        return tree[parentIndex(index)];
+    }
+
+    private int leftChildIndex(int index) {
         return index * 2 + 1;
     }
 
-    private int getRightChildIndex(int index) {
+    private int rightChildIndex(int index) {
         return index * 2 + 2;
     }
 
-    private T getParent(int index) {
-        return tree[getParentIndex(index)];
-    }
-
-    private int getParentIndex(int index) {
+    private int parentIndex(int index) {
         return (index - 1) / 2;
     }
 
@@ -106,20 +101,12 @@ public class Heap<T extends Comparable<T>> {
         tree[index2] = temp;
     }
 
-    private boolean isOutOfScope(int index) {
-        return index >= pointer;
-    }
-
     public boolean isFull() {
-        return tree.length == pointer;
+        return tree.length == size;
     }
 
     public boolean isEmpty() {
-        return pointer == 0;
-    }
-
-    private boolean isPowerOfTwo(int number) {
-        return (number & (number - 1)) == 0;
+        return size == 0;
     }
 
     @Override
@@ -130,7 +117,7 @@ public class Heap<T extends Comparable<T>> {
         mainLoop:
         for (int itemsCount = 1; ; itemsCount *= 2) {
             for (int i = 0; i < itemsCount; i++) {
-                if (k + i >= pointer)
+                if (k + i >= size)
                     break mainLoop;
                 sb.append(tree[k + i]);
                 sb.append(" ");
