@@ -128,4 +128,15 @@ public class Heap<T extends Comparable<T>> {
 
         return sb.toString();
     }
+
+    /**
+     * Heap Sort
+     * O(n)
+     */
+    public static <T extends Comparable<T>> void sort(T[] array) {
+        var heap = new Heap<T>(array.length);
+        for (T item : array) heap.insert(item);
+        for (int i = array.length - 1; i >= 0; i--)
+            array[i] = heap.remove();
+    }
 }
