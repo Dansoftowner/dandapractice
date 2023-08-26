@@ -139,4 +139,13 @@ public class Heap<T extends Comparable<T>> {
         for (int i = array.length - 1; i >= 0; i--)
             array[i] = heap.remove();
     }
+
+    public static int kthLargestItem(int[] array, int k) {
+        if (k < 1 || k > array.length)
+            throw new IllegalArgumentException();
+        var heap = new Heap<Integer>(array.length);
+        for (int i : array) heap.insert(i);
+        for (int i = 1; i < k; i++) heap.remove();
+        return heap.remove();
+    }
 }
