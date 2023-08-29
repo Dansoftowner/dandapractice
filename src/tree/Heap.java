@@ -160,4 +160,18 @@ public class Heap<T extends Comparable<T>> {
         }
         return true;
     }
+
+    public static boolean isMaxHeap2(int[] array) {
+        return isMaxHeap2(array, 0);
+    }
+
+    private static boolean isMaxHeap2(int[] array, int i) {
+        int lastParentIndex = array.length / 2 - 1;
+        if (i > lastParentIndex)
+            return true;
+        int leftChildIndex = i * 2 + 1;
+        int rightChildIndex = i * 2 + 2;
+        boolean isValid = array[leftChildIndex] <= array[i] && (rightChildIndex >= array.length || array[rightChildIndex] <= array[i]);
+        return isValid && isMaxHeap2(array, leftChildIndex) && isMaxHeap2(array, rightChildIndex);
+    }
 }
