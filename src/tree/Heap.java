@@ -148,4 +148,16 @@ public class Heap<T extends Comparable<T>> {
         for (int i = 1; i < k; i++) heap.remove();
         return heap.remove();
     }
+
+    public static boolean isMaxHeap(int[] array) {
+        for (int i = 0; i < array.length / 2; i++) {
+            int leftChildIndex = i * 2 + 1;
+            int rightChildIndex = i * 2 + 2;
+            if (leftChildIndex < array.length && array[leftChildIndex] > array[i])
+                return false;
+            if (rightChildIndex < array.length && array[rightChildIndex] > array[i])
+                return false;
+        }
+        return true;
+    }
 }
