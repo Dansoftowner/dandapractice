@@ -127,4 +127,9 @@ public class Trie {
     public boolean isEmpty() {
         return root == null;
     }
+
+    @Override
+    public String toString() {
+        return wordsWithPrefix("").toString();
+    }
 }
