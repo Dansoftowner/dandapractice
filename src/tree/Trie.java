@@ -95,8 +95,29 @@ public class Trie {
             return;
 
         remove(root, word, i + 1);
-        if(!child.hasChildren() && !child.endOfWord)
+        if (!child.hasChildren() && !child.endOfWord)
             root.removeChild(ch);
+    }
+
+    public MyLinkedList<String> wordsWithPrefix(String prefix) {
+        var list = new MyLinkedList<String>();
+
+        var current = root;
+        for (char c : prefix.toCharArray()) {
+            if (!current.hasChild(c))
+                return list;
+            current = current.getChild(c);
+        }
+
+        wordsWithPrefix(current, prefix, list);
+        return list;
+    }
+
+    private void wordsWithPrefix(Node root, String word, MyLinkedList<String> words) {
+        if (root.endOfWord)
+            words.addLast(word);
+        for (Node child : root.getChildren())
+            wordsWithPrefix(child, word + child.value, words);
     }
 
     public boolean isEmpty() {
