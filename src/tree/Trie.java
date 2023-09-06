@@ -101,23 +101,27 @@ public class Trie {
 
     public MyLinkedList<String> wordsWithPrefix(String prefix) {
         var list = new MyLinkedList<String>();
-
-        var current = root;
-        for (char c : prefix.toCharArray()) {
-            if (!current.hasChild(c))
-                return list;
-            current = current.getChild(c);
-        }
-
-        wordsWithPrefix(current, prefix, list);
+        wordsWithPrefix(findLastNodeOf(prefix), prefix, list);
         return list;
     }
 
     private void wordsWithPrefix(Node root, String word, MyLinkedList<String> words) {
+        if (root == null)
+            return;
         if (root.endOfWord)
             words.addLast(word);
         for (Node child : root.getChildren())
             wordsWithPrefix(child, word + child.value, words);
+    }
+
+    private Node findLastNodeOf(String word) {
+        var current = root;
+        for (char c : word.toCharArray()) {
+            if (!current.hasChild(c))
+                return null;
+            current = current.getChild(c);
+        }
+        return current;
     }
 
     public boolean isEmpty() {
