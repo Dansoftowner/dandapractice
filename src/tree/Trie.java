@@ -36,6 +36,10 @@ public class Trie {
             children[ch - 97] = null;
         }
 
+        boolean hasChildren() {
+            return getChildren().length > 0;
+        }
+
         Node[] getChildren() {
             return Arrays.stream(children).filter(Objects::nonNull).toArray(Node[]::new);
         }
@@ -79,21 +83,20 @@ public class Trie {
         remove(root, word, 0);
     }
 
-    private boolean remove(Node root, String word, int i) {
-        if (i >= word.length())
-            return true;
-        char ch = word.charAt(i);
-        if (root.hasChild(ch)) {
-            if (remove(root.getChild(ch), word, i + 1)) {
-                var child = root.getChild(ch);
-                child.endOfWord = false;
-                if (child.getChildren().length == 0) {
-                    root.removeChild(ch);
-                    return true;
-                }
-            }
+    private void remove(Node root, String word, int i) {
+        if (i == word.length()) {
+            root.endOfWord = false;
+            return;
         }
-        return false;
+
+        char ch = word.charAt(i);
+        var child = root.getChild(ch);
+        if (child == null)
+            return;
+
+        remove(root, word, i + 1);
+        if(!child.hasChildren() && !child.endOfWord)
+            root.removeChild(ch);
     }
 
     public boolean isEmpty() {
