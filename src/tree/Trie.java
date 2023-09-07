@@ -90,6 +90,17 @@ public class Trie {
         return root.hasChild(ch) && containsRecursive(root.getChild(ch), word, i + 1);
     }
 
+    public int countWords() {
+        return countWords(root);
+    }
+
+    private int countWords(Node root) {
+        int c = root.endOfWord ? 1 : 0;
+        for (Node child : root.getChildren())
+            c += countWords(child);
+        return c;
+    }
+
     public void remove(String word) {
         remove(root, word, 0);
     }
