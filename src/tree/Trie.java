@@ -79,6 +79,17 @@ public class Trie {
         return current.endOfWord;
     }
 
+    public boolean containsRecursive(String word) {
+        return containsRecursive(root, word, 0);
+    }
+
+    private boolean containsRecursive(Node root, String word, int i) {
+        if (i == word.length() && root.endOfWord)
+            return true;
+        char ch = word.charAt(i);
+        return root.hasChild(ch) && containsRecursive(root.getChild(ch), word, i + 1);
+    }
+
     public void remove(String word) {
         remove(root, word, 0);
     }
