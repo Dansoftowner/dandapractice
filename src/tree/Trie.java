@@ -101,6 +101,20 @@ public class Trie {
         return c;
     }
 
+    public String longestCommonPrefix() {
+        return longestCommonPrefix(root, "");
+    }
+
+    private String longestCommonPrefix(Node root, String prefix) {
+        if (root.endOfWord)
+            return prefix;
+        Node[] children = root.getChildren();
+        if (children.length != 1)
+            return prefix;
+        Node child = children[0];
+        return longestCommonPrefix(child, prefix + child.value);
+    }
+
     public void remove(String word) {
         remove(root, word, 0);
     }
