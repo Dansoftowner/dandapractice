@@ -32,6 +32,14 @@ public class Trie {
             children[ch - 97] = new Node(ch);
         }
 
+        void removeChild(char ch) {
+            children[ch - 97] = null;
+        }
+
+        boolean hasChildren() {
+            return getChildren().length > 0;
+        }
+
         Node[] getChildren() {
             return Arrays.stream(children).filter(Objects::nonNull).toArray(Node[]::new);
         }
@@ -64,38 +72,100 @@ public class Trie {
             return false;
         var current = root;
         for (char ch : word.toCharArray()) {
-            if (!root.hasChild(ch))
+            if (!current.hasChild(ch))
                 return false;
             current = current.getChild(ch);
         }
         return current.endOfWord;
     }
 
-    public MyLinkedList<Character> preOrderTraversal() {
-        var list = new MyLinkedList<Character>();
-        preOrderTraversal(root, list);
+    public boolean containsRecursive(String word) {
+        return containsRecursive(root, word, 0);
+    }
+
+    private boolean containsRecursive(Node root, String word, int i) {
+        if (i == word.length() && root.endOfWord)
+            return true;
+        char ch = word.charAt(i);
+        return root.hasChild(ch) && containsRecursive(root.getChild(ch), word, i + 1);
+    }
+
+    public int countWords() {
+        return countWords(root);
+    }
+
+    private int countWords(Node root) {
+        int c = root.endOfWord ? 1 : 0;
+        for (Node child : root.getChildren())
+            c += countWords(child);
+        return c;
+    }
+
+    public String longestCommonPrefix() {
+        return longestCommonPrefix(root, "");
+    }
+
+    private String longestCommonPrefix(Node root, String prefix) {
+        if (root.endOfWord)
+            return prefix;
+        Node[] children = root.getChildren();
+        if (children.length != 1)
+            return prefix;
+        Node child = children[0];
+        return longestCommonPrefix(child, prefix + child.value);
+    }
+
+    public void remove(String word) {
+        remove(root, word, 0);
+    }
+
+    private void remove(Node root, String word, int i) {
+        if (i == word.length()) {
+            root.endOfWord = false;
+            return;
+        }
+
+        char ch = word.charAt(i);
+        var child = root.getChild(ch);
+        if (child == null)
+            return;
+
+        remove(root, word, i + 1);
+        if (!child.hasChildren() && !child.endOfWord)
+            root.removeChild(ch);
+    }
+
+    public MyLinkedList<String> wordsWithPrefix(String prefix) {
+        var list = new MyLinkedList<String>();
+        wordsWithPrefix(findLastNodeOf(prefix), prefix, list);
         return list;
     }
 
-    private void preOrderTraversal(Node root, MyLinkedList<Character> list) {
-        list.addLast(root.value);
+    private void wordsWithPrefix(Node root, String word, MyLinkedList<String> words) {
+        if (root == null)
+            return;
+        if (root.endOfWord)
+            words.addLast(word);
         for (Node child : root.getChildren())
-            preOrderTraversal(child, list);
+            wordsWithPrefix(child, word + child.value, words);
     }
 
-    public MyLinkedList<Character> postOrderTraversal() {
-        var list = new MyLinkedList<Character>();
-        postOrderTraversal(root, list);
-        return list;
-    }
-
-    private void postOrderTraversal(Node root, MyLinkedList<Character> list) {
-        for (Node child : root.getChildren())
-            postOrderTraversal(child, list);
-        list.addLast(root.value);
+    private Node findLastNodeOf(String word) {
+        var current = root;
+        for (char c : word.toCharArray()) {
+            if (!current.hasChild(c))
+                return null;
+            current = current.getChild(c);
+        }
+        return current;
     }
 
     public boolean isEmpty() {
         return root == null;
+    }
+
+    @Override
+    public String toString() {
+        return wordsWithPrefix("").toString();
     }
 }
